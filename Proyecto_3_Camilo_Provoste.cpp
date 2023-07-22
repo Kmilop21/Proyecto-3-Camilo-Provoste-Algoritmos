@@ -18,12 +18,12 @@ vector<int> selectionSort(vector<int>& vect)
     vector<int> temp;
     temp.assign(vect.begin(), vect.end());
 
-    std::vector<int>::size_type s = temp.size();
+    vector<int>::size_type s = temp.size();
 
-    for(std::vector<int>::size_type i = 0; i < s-1 ; i++)
+    for(vector<int>::size_type i = 0; i < s-1 ; i++)
     {
-        std::vector<int>::size_type min = i;    
-        for(std::vector<int>::size_type j = i+1 ; i < s; j++)
+        vector<int>::size_type min = i;    
+        for(vector<int>::size_type j = i+1 ; i < s; j++)
         {
             if(temp[j] < temp[min]) min = j;
         }
@@ -37,11 +37,11 @@ vector<int> bubbleSort(vector<int>& vect) {
     vector<int> temp;
     temp.assign(vect.begin(), vect.end());
 
-    std::vector<int>::size_type s = temp.size();
+    vector<int>::size_type s = temp.size();
     bool swapped;
-    for (std::vector<int>::size_type i = 0; i < s - 1; i++) {
+    for (vector<int>::size_type i = 0; i < s - 1; i++) {
         swapped = false;
-        for (std::vector<int>::size_type j = 0; j < s - i - 1; j++) {
+        for (vector<int>::size_type j = 0; j < s - i - 1; j++) {
             if (temp[j] > temp[j + 1]) {
                 swap(temp[j], temp[j + 1]);
                 swapped = true;
@@ -54,19 +54,19 @@ vector<int> bubbleSort(vector<int>& vect) {
     return temp;
 }
 
-vector<int> insertionSort(vector<int> vect)
+vector<int> insertionSort(vector<int>& vect)
 {
     vector<int> temp;
     temp.assign(vect.begin(), vect.end());
 
-    std::vector<int>::size_type s = temp.size();
+    vector<int>::size_type s = temp.size();
 
-    for(std::vector<int>::size_type i = 1; i < s; i++)
+    for(vector<int>::size_type i = 1; i < s; i++)
     {
         int key = temp[i];
-        std::vector<int>::size_type j = i-1;
+        vector<int>::size_type j = i-1;
 
-        while(j >= 0 && temp[j] > key)
+        while(j != vector<int>::size_type(-1) && temp[j] > key)
         {
             temp[j+1] = temp[j];
             j--;
@@ -77,19 +77,19 @@ vector<int> insertionSort(vector<int> vect)
     return temp;
 }
 
-vector<int> shellSort(vector<int> vect)
+vector<int> shellSort(vector<int>& vect)
 {
     vector<int> temp;
     temp.assign(vect.begin(), vect.end());
 
-    std::vector<int>::size_type s = temp.size();
+    vector<int>::size_type s = temp.size();
 
-    for(std::vector<int>::size_type gap = s/2 ; gap > 0; gap /= 2)
+    for(vector<int>::size_type gap = s/2 ; gap > 0; gap /= 2)
     {
-        for(std::vector<int>::size_type i = gap; i < s; i++)
+        for(vector<int>::size_type i = gap; i < s; i++)
         {
-            std::vector<int>::size_type aux = temp[i];
-            std::vector<int>::size_type j;
+            int aux = temp[i];
+            vector<int>::size_type j;
 
             for(j = i; j >= gap && temp[j-gap] > aux; j -= gap)
             {
@@ -102,7 +102,76 @@ vector<int> shellSort(vector<int> vect)
     return temp;
 }
 
+void merge(vector<int>& temp, int left, int middle, int right)
+{
+    int n1 = middle - left + 1;
+    int n2 = right - middle;
 
+    vector<int> L(n1), R(n2);
+
+    for(int i = 0; i < n1; i++)
+        L[i] = temp[left+1];
+
+    for(int j = 0; j < n2; j++)
+        R[j] = temp[middle + 1 + j];
+
+    int i = 0, j = 0, k = left;
+
+    while(i < n1 && j < n2)
+    {
+        if(L[i] <= R[j])
+        {
+            temp[k] = L[i];
+            i++;
+        }
+        else
+        {
+            temp[k] = R[j];
+        }
+
+        k++;
+    }
+
+    while (i < n1) 
+    {
+        temp[k] = L[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) 
+    {
+        temp[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+vector<int> mergeSort(vector<int>& vect, int left, int right)
+{
+    vector<int> temp;
+    temp.assign(vect.begin(), vect.end());
+
+    if(left<right)
+    {
+        int middle = left + (right-left)/2 ;
+
+        mergeSort(temp, left, middle);
+        mergeSort(temp, middle+1, right);
+
+        merge(temp, left, middle, right);
+    }
+
+    return vect;
+}
+
+void printVector(vector<int> vect)
+{
+    for(vector<int>::size_type i = 0 ; i < vect.size() ; i++)
+    {
+        cout << vect[i] << " ";
+    }
+}
 
 
 int main()
@@ -122,19 +191,13 @@ int main()
     if(orden == 1) cout << "Ascendente" << endl;
     else if(orden == 2) cout << "Descendiente" << endl;
 
-    for(std::vector<int>::size_type i = 0 ; i < vect.size() ; i++)
-    {
-        cout << vect[i] << " ";
-    }
+    printVector(vect);
 
     cout << "COPIANDO" << endl;
 
     vector<int> bubbleS = bubbleSort(vect);
 
-    for(std::vector<int>::size_type i = 0; i < bubbleS.size() ; i++)
-    {
-        cout << bubbleS[i] << " ";
-    }
+    printVector(bubbleS);
 
     return 0;
 }
