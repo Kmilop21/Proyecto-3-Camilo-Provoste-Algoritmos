@@ -18,20 +18,18 @@ vector<int> selectionSort(vector<int>& vect)
     vector<int> temp;
     temp.assign(vect.begin(), vect.end());
 
-    std::vector<int>::size_type n = temp.size();
+    std::vector<int>::size_type s = temp.size();
 
-    for(std::vector<int>::size_type i = 0; i < n-1 ; i++)
+    for(std::vector<int>::size_type i = 0; i < s-1 ; i++)
     {
         std::vector<int>::size_type min = i;    
-        for(std::vector<int>::size_type j = i+1 ; i < n; j++)
+        for(std::vector<int>::size_type j = i+1 ; i < s; j++)
         {
             if(temp[j] < temp[min]) min = j;
         }
 
         if(min != i) swap(temp[min],temp[i]);
     }
-
-
     return temp;
 }
 
@@ -51,6 +49,29 @@ vector<int> bubbleSort(vector<int>& vect) {
         }
 
         if (!swapped) break;
+    }
+
+    return temp;
+}
+
+vector<int> insertionSort(vector<int> vect)
+{
+    vector<int> temp;
+    temp.assign(vect.begin(), vect.end());
+
+    std::vector<int>::size_type s = temp.size();
+
+    for(std::vector<int>::size_type i = 1; i < s; i++)
+    {
+        int key = temp[i];
+        std::vector<int>::size_type j = i-1;
+
+        while(j >= 0 && temp[j] > key)
+        {
+            temp[j+1] = temp[j];
+            j--;
+        }
+        temp[j+1] = key;
     }
 
     return temp;
