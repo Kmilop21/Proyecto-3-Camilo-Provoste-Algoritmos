@@ -77,13 +77,38 @@ vector<int> insertionSort(vector<int> vect)
     return temp;
 }
 
+vector<int> shellSort(vector<int> vect)
+{
+    vector<int> temp;
+    temp.assign(vect.begin(), vect.end());
+
+    std::vector<int>::size_type s = temp.size();
+
+    for(std::vector<int>::size_type gap = s/2 ; gap > 0; gap /= 2)
+    {
+        for(std::vector<int>::size_type i = gap; i < s; i++)
+        {
+            std::vector<int>::size_type aux = temp[i];
+            std::vector<int>::size_type j;
+
+            for(j = i; j >= gap && temp[j-gap] > aux; j -= gap)
+            {
+                temp[j] = temp[j-gap];
+            }
+            temp[j] = aux;
+        }
+    }
+
+    return temp;
+}
+
 
 
 
 int main()
 {
     int orden;
-    vector<int> vect = {1,2,3,4,5,6,7,8,9,10};
+    vector<int> vect = {123,2,43,45,65,6,77,0,9,110};
 
     cout << "Bienvenido a la carrera de algoritmos" << endl;
     cout << "Para elegir un ordenamiento ascendente ingrese 1 y para elegir un ordenamiento descendiente ingrese 2: ";
