@@ -13,89 +13,220 @@
 #include <chrono>
 using namespace std;
 
-vector<int> selectionSort(vector<int>& vect)
+//Ascendente
+vector<int> selectionSort(vector<int>& vect, bool Asc);
+
+vector<int> bubbleSort(vector<int>& vect, bool Asc);
+
+vector<int> insertionSort(vector<int>& vect, bool Asc);
+
+vector<int> shellSort(vector<int>& vect, bool Asc);
+
+void merge(vector<int>& temp, size_t left, size_t middle, size_t right);
+
+vector<int> mergeSort(vector<int>& vect, size_t left, size_t right);
+
+size_t partition(vector<int>& temp, size_t low, size_t high);
+
+void quickSortImpl(vector<int>& temp, size_t low, size_t high);
+
+vector<int> quickSort(std::vector<int>& vect);
+
+void heapify(vector<int>& temp, int n, int i);
+
+vector<int> heapSort(vector<int> vect);
+
+//Descendente
+
+
+void printVector(vector<int> vect);
+
+
+int main()
+{
+    int orden;
+    vector<int> vect = {123,2,43,45,65,6,77,0,9,110};
+
+    cout << "Bienvenido a la carrera de algoritmos" << endl;
+    cout << "Para elegir un ordenamiento ascendente ingrese 1 y para elegir un ordenamiento descendiente ingrese 2: ";
+    cin >> orden;
+    while(orden < 1 || orden > 2 )
+    {
+        cout << "Ingreso incorrecto, presione 1 para orden ascendente o 2 para descendente: ";
+        cin >> orden;
+    }
+    cout << "Opcion elegida: ";
+    if(orden == 1) cout << "Ascendente" << endl;
+    else if(orden == 2) cout << "Descendiente" << endl;
+
+    printVector(vect);
+
+    cout << "COPIANDO" << endl;
+
+    vector<int> bubbleS = bubbleSort(vect, true);
+
+    printVector(bubbleS);
+
+    return 0;
+}
+
+vector<int> selectionSort(vector<int>& vect, bool Asc)
 {
     vector<int> temp;
     temp.assign(vect.begin(), vect.end());
 
     size_t s = temp.size();
 
-    for(size_t i = 0; i < s-1 ; i++)
+    if(Asc)
     {
-        size_t min = i;    
-        for(size_t j = i+1 ; i < s; j++)
+        for(size_t i = 0; i < s-1 ; i++)
         {
-            if(temp[j] < temp[min]) min = j;
-        }
+            size_t min = i;    
+            for(size_t j = i+1 ; j < s; j++)
+            {
+                if(temp[j] < temp[min]) min = j;
+            }
 
-        if(min != i) swap(temp[min],temp[i]);
+            if(min != i) swap(temp[min],temp[i]);
+        }
+    }
+    else
+    {
+        for(size_t i = 0; i < s-1 ; i++)
+        {
+            size_t max = i;    
+            for(size_t j = i+1 ; j < s; j++)
+            {
+                if(temp[j] > temp[max]) max = j;
+            }
+
+            if(max != i) swap(temp[i],temp[max]);
+        }
     }
     return temp;
 }
 
-vector<int> bubbleSort(vector<int>& vect) {
+vector<int> bubbleSort(vector<int>& vect, bool Asc) 
+{
     vector<int> temp;
     temp.assign(vect.begin(), vect.end());
 
     size_t s = temp.size();
     bool swapped;
-    for (size_t i = 0; i < s - 1; i++) {
-        swapped = false;
-        for (size_t j = 0; j < s - i - 1; j++) {
-            if (temp[j] > temp[j + 1]) {
-                swap(temp[j], temp[j + 1]);
-                swapped = true;
-            }
-        }
 
-        if (!swapped) break;
-    }
-
-    return temp;
-}
-
-vector<int> insertionSort(vector<int>& vect)
-{
-    vector<int> temp;
-    temp.assign(vect.begin(), vect.end());
-
-    size_t s = temp.size();
-
-    for(size_t i = 1; i < s; i++)
+    if(Asc)
     {
-        int key = temp[i];
-        size_t j = i-1;
-
-        while(j != size_t(-1) && temp[j] > key)
+        for (size_t i = 0; i < s - 1; i++) 
         {
-            temp[j+1] = temp[j];
-            j--;
-        }
-        temp[j+1] = key;
-    }
-
-    return temp;
-}
-
-vector<int> shellSort(vector<int>& vect)
-{
-    vector<int> temp;
-    temp.assign(vect.begin(), vect.end());
-
-    size_t s = temp.size();
-
-    for(size_t gap = s/2 ; gap > 0; gap /= 2)
-    {
-        for(size_t i = gap; i < s; i++)
-        {
-            int aux = temp[i];
-            size_t j;
-
-            for(j = i; j >= gap && temp[j-gap] > aux; j -= gap)
+            swapped = false;
+            for (size_t j = 0; j < s - i - 1; j++) 
             {
-                temp[j] = temp[j-gap];
+                if (temp[j] > temp[j + 1]) 
+                {
+                    swap(temp[j], temp[j + 1]);
+                    swapped = true;
+                }
             }
-            temp[j] = aux;
+            if (!swapped) break;
+        }
+    }
+    else
+    {
+        for (size_t i = 0; i < s - 1; i++) 
+        {
+            swapped = false;
+            for (size_t j = 0; j < s - i - 1; j++) 
+            {
+                if (temp[j] < temp[j + 1]) 
+                {
+                    swap(temp[j], temp[j + 1]);
+                    swapped = true;
+                }
+            }
+            if (!swapped) break;
+        }
+    }
+    return temp;
+}
+
+vector<int> insertionSort(vector<int>& vect, bool Asc)
+{
+    vector<int> temp;
+    temp.assign(vect.begin(), vect.end());
+
+    size_t s = temp.size();
+
+    if(Asc)
+    {
+        for(size_t i = 1; i < s; i++)
+        {
+            int key = temp[i];
+            size_t j = i-1;
+
+            while(j != size_t(-1) && temp[j] > key)
+            {
+                temp[j+1] = temp[j];
+                j--;
+            }
+            temp[j+1] = key;
+        }
+    }
+    else
+    {
+        for(size_t i = 1; i < s; i++)
+        {
+            int key = temp[i];
+            size_t j = i-1;
+
+            while(j >= size_t(0) && temp[j] < key)
+            {
+                temp[j+1] = temp[j];
+                j--;
+            }
+            temp[j+1] = key;
+        }
+    }
+    return temp;
+}
+
+vector<int> shellSort(vector<int>& vect, bool Asc)
+{
+    vector<int> temp;
+    temp.assign(vect.begin(), vect.end());
+
+    size_t s = temp.size();
+
+    if(Asc)
+    {
+        for(size_t gap = s/2 ; gap > 0; gap /= 2)
+        {
+            for(size_t i = gap; i < s; i++)
+            {
+                int aux = temp[i];
+                size_t j;
+
+                for(j = i; j >= gap && temp[j-gap] > aux; j -= gap)
+                {
+                    temp[j] = temp[j-gap];
+                }
+                temp[j] = aux;
+            }
+        }
+    }
+    else
+    {
+        for(size_t gap = s/2 ; gap > 0; gap /= 2)
+        {
+            for(size_t i = gap; i < s; i++)
+            {
+                int aux = temp[i];
+                size_t j;
+
+                for(j = i; j >= gap && temp[j-gap] < aux; j -= gap)
+                    temp[j] = temp[j-gap];
+
+                temp[j] = aux;
+            }
         }
     }
 
@@ -243,33 +374,4 @@ void printVector(vector<int> vect)
     {
         cout << vect[i] << " ";
     }
-}
-
-
-int main()
-{
-    int orden;
-    vector<int> vect = {123,2,43,45,65,6,77,0,9,110};
-
-    cout << "Bienvenido a la carrera de algoritmos" << endl;
-    cout << "Para elegir un ordenamiento ascendente ingrese 1 y para elegir un ordenamiento descendiente ingrese 2: ";
-    cin >> orden;
-    while(orden < 1 || orden > 2 )
-    {
-        cout << "Ingreso incorrecto, presione 1 para orden ascendente o 2 para descendente: ";
-        cin >> orden;
-    }
-    cout << "Opcion elegida: ";
-    if(orden == 1) cout << "Ascendente" << endl;
-    else if(orden == 2) cout << "Descendiente" << endl;
-
-    printVector(vect);
-
-    cout << "COPIANDO" << endl;
-
-    vector<int> bubbleS = bubbleSort(vect);
-
-    printVector(bubbleS);
-
-    return 0;
 }
