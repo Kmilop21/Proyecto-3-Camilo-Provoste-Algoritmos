@@ -39,10 +39,13 @@ vector<int> heapSort(vector<int> vect, bool Asc);
 
 void printVector(vector<int> vect);
 
+void carrera(vector<int> vect, bool Asc);
+
 
 int main()
 {
     int orden;
+    bool Asc;
     vector<int> vect = {123,2,43,45,65,6,77,0,9,110};
 
     cout << "Bienvenido a la carrera de algoritmos" << endl;
@@ -54,67 +57,19 @@ int main()
         cin >> orden;
     }
     cout << "Opcion elegida: ";
-    if(orden == 1) cout << "Ascendente" << endl;
-    else if(orden == 2) cout << "Descendiente" << endl;
-
+    if(orden == 1) 
+    {
+        cout << "Ascendente" << endl;
+        Asc = true;
+    }
+    else if(orden == 2) 
+    {
+        cout << "Descendiente" << endl;
+        Asc = false;
+    }
     printVector(vect);
 
-    cout << "Selection Sort: " << endl;
-    vector<int> selectionS = selectionSort(vect, true);
-    printVector(selectionS);
-
-    cout << "Inverted Selection Sort: " << endl;
-    vector<int> IselectionS = selectionSort(vect, false);
-    printVector(IselectionS);
-
-    cout << "Bubble Sort: " << endl;
-    vector<int> bubbleS = bubbleSort(vect, true);
-    printVector(bubbleS);
-
-    cout << "Inverted Bubble Sort: " << endl;
-    vector<int> IbubbleS = bubbleSort(vect, false);
-    printVector(IbubbleS);
-
-    cout << "Insertion Sort: " << endl;
-    vector<int> insertionS = insertionSort(vect, true);
-    printVector(insertionS);
-
-    cout << "Inverted Insertion Sort: " << endl;
-    vector<int> IinsertionS = insertionSort(vect, false);
-    printVector(IinsertionS);
-
-    cout << "Shell Sort: " << endl;
-    vector<int> shellS = shellSort(vect, true);
-    printVector(shellS);
-
-    cout << "Inverted Shell Sort: " << endl;
-    vector<int> IshellS = shellSort(vect, false);
-    printVector(IshellS);
-
-    cout << "Merge Sort: " << endl;
-    vector<int> mergeS = mergeSort(vect, true);
-    printVector(mergeS);
-
-    cout << "Inverted Merge Sort: " << endl;
-    vector<int> ImergeS = mergeSort(vect, false);
-    printVector(ImergeS);
-
-    cout << "Heap Sort: " << endl;
-    vector<int> heapS = heapSort(vect, true);
-    printVector(heapS);
-
-    cout << "Inverted Heap Sort: " << endl;
-    vector<int> IheapS = heapSort(vect, false);
-    printVector(IheapS);
-
-    cout << "Quick Sort: " << endl;
-    vector<int> quickS = quickSort(vect, true);
-    printVector(quickS);
-
-    cout << "Inverted Quick Sort: " << endl;
-    vector<int> IquickS = quickSort(vect, false);
-    printVector(IquickS);
-
+    carrera(vect, Asc);
 
     return 0;
 }
@@ -446,4 +401,75 @@ void printVector(vector<int> vect)
     }
 
     cout << endl;
+}
+
+void carrera(vector<int> vect, bool Asc)
+{
+    for (int i = 0; i < 7; i++)
+    {
+        auto start = chrono::system_clock::now();
+        switch (i)
+        {
+            case 0:
+            {
+                cout << "Selection Sort: " << endl;
+                vector<int> selectionS = selectionSort(vect, Asc);
+                printVector(selectionS);
+                break;
+            }
+            
+            case 1:
+            {
+                cout << "Bubble Sort: " << endl;
+                vector<int> bubbleS = bubbleSort(vect, Asc);
+                printVector(bubbleS);
+                break;
+            }
+
+            case 2:
+            {
+                cout << "Insertion Sort: " << endl;
+                vector<int> insertionS = insertionSort(vect, Asc);
+                printVector(insertionS);
+                break;
+            }
+
+            case 3:
+            {
+                cout << "Shell Sort: " << endl;
+                vector<int> shellS = shellSort(vect, Asc);
+                printVector(shellS);
+                break;
+            }
+
+            case 4:
+            {
+                cout << "Merge Sort: " << endl;
+                vector<int> mergeS = mergeSort(vect, Asc);
+                printVector(mergeS);
+                break;
+            }
+
+            case 5:
+            {
+                cout << "Quick Sort: " << endl;
+                vector<int> quickS = quickSort(vect, Asc);
+                printVector(quickS);
+                break;
+            }
+
+            case 6:
+            {
+                cout << "Heap Sort: " << endl;
+                vector<int> heapS = heapSort(vect, Asc);
+                printVector(heapS);
+                break;
+            }
+        }
+        auto end = chrono::system_clock::now();
+
+        chrono::duration<float,milli> duration = end - start;
+        cout << "Duration: " << duration.count() << "ms" << endl;
+        cout << endl << endl;
+    }
 }
