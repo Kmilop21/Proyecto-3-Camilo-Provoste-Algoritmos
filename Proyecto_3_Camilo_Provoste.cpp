@@ -43,20 +43,47 @@ class Data
             Descendant = Ascendant;
             reverse(Descendant.begin(), Descendant.end());
         }
+        void randomWithDups(int max, vector<int>& RandomDup)
+        {
+            uniform_int_distribution<int> dist(0, max);
+
+            for(int i = 0; i < max; i++)
+            {
+                int n = dist(gen);
+                RandomDup.push_back(n);
+            }
+        }
+
+        void randomWithoutDups(int max, vector<int>& RandomUnique)
+        {
+            RandomUnique.clear(); //En caso de que tenga algo
+            for (int i = 0; i < max; i++) //Generando todos los numeros
+            {
+                RandomUnique.push_back(i);
+            }
+            
+            //Usando el algoritmo "Fisher-Yates" para revolver el vector
+            for (int i = max - 1; i > 0; i--) 
+            {
+                uniform_int_distribution<int> dist(0, i);
+                int j = dist(gen);
+                swap(RandomUnique[i], RandomUnique[j]);
+            }
+        }
 
         struct Set
-    {
-        int minR, maxR, max;
-        struct Order
         {
-            std::vector<int> vect;
-            int time;
+            int minR, maxR, max;
+            struct Order
+            {
+                std::vector<int> vect;
+                int time;
+            };
+            Order Ascendant;
+            Order Descendant;
+            Order RandomDup;
+            Order RandomUnique;
         };
-        Order Ascendant;
-        Order Descendant;
-        Order RandomDup;
-        Order RandomUnique;
-    };
 
         struct Set set1;
         struct Set set2;
@@ -97,22 +124,28 @@ void carrera(vector<int> vect, bool Asc);
 
 int main()
 {
-
+    //Generando toda la informacion de los sets
     Data info = Data();
-    info.set1.minR = 90000;
-    info.set1.maxR = 100000;
-    info.set1.max = info.getMax(info.set1.minR,info.set1.maxR);
-    info.genAscDesc(info.set1.max, info.set1.Ascendant.vect, info.set1.Descendant.vect);
+    info.set1.minR = 90000; //Rango minimo
+    info.set1.maxR = 100000; //Rango maximo
+    info.set1.max = info.getMax(info.set1.minR,info.set1.maxR); //Generando maximo
+    info.genAscDesc(info.set1.max, info.set1.Ascendant.vect, info.set1.Descendant.vect); //Set ascendiente y descendiente
+    info.randomWithDups(info.set1.max,info.set1.RandomDup.vect); //Set random con duplicados
+    info.randomWithoutDups(info.set1.max,info.set1.RandomUnique.vect); //Set random sin duplicados
 
-    info.set2.minR = 50000;
-    info.set2.maxR = 70000;
-    info.set2.max = info.getMax(info.set2.minR,info.set2.maxR);
-    info.genAscDesc(info.set2.max, info.set2.Ascendant.vect, info.set2.Descendant.vect);
+    info.set2.minR = 50000; //Rango minimo
+    info.set2.maxR = 70000; //Rango maximo
+    info.set2.max = info.getMax(info.set2.minR,info.set2.maxR); //Generando maximo
+    info.genAscDesc(info.set2.max, info.set2.Ascendant.vect, info.set2.Descendant.vect); //Set ascendiente y descendiente
+    info.randomWithDups(info.set2.max,info.set2.RandomDup.vect); //Set random con duplicados
+    info.randomWithoutDups(info.set2.max,info.set2.RandomUnique.vect); //Set random sin duplicados
 
-    info.set3.minR = 500;
-    info.set3.maxR = 1000;
-    info.set3.max = info.getMax(info.set3.minR,info.set3.maxR);
-    info.genAscDesc(info.set3.max, info.set3.Ascendant.vect, info.set3.Descendant.vect);
+    info.set3.minR = 500; //Rango minimo
+    info.set3.maxR = 1000; //Rango maximo
+    info.set3.max = info.getMax(info.set3.minR,info.set3.maxR); //Generando maximo
+    info.genAscDesc(info.set3.max, info.set3.Ascendant.vect, info.set3.Descendant.vect); //Set ascendiente y descendiente
+    info.randomWithDups(info.set3.max,info.set3.RandomDup.vect); //Set random con duplicados
+    info.randomWithoutDups(info.set3.max,info.set3.RandomUnique.vect); //Set random sin duplicados
 
     int orden;
     bool Asc;
