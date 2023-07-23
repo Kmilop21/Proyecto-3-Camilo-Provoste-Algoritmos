@@ -165,6 +165,47 @@ vector<int> mergeSort(vector<int>& vect, int left, int right)
     return vect;
 }
 
+int partition(vector<int>& temp, int low, int high)
+{
+    int pivot = temp[high];
+    int i = low - 1;
+
+    for(int j = low; j < high; j++)
+    {
+        if(temp[j] <= pivot)
+        {
+            i++;
+            swap(temp[i],temp[j]);
+        }
+    }
+
+    swap(temp[i+1],temp[high]);
+    return i+1;
+}
+
+vector<int> quickSort(vector<int>& vect, int low, int high)
+{
+    vector<int> temp;
+    temp.assign(vect.begin(), vect.end());
+
+    if(low < high)
+    {
+        int PaIn = partition(vect, low, high);
+        quickSort(vect, low, PaIn - 1);
+        quickSort(vect, PaIn + 1, high);
+    }
+
+    return temp;
+}
+
+vector<int> heapSort(vector<int> vect)
+{
+    vector<int> temp;
+    temp.assign(vect.begin(), vect.end());
+
+    return vect;
+}
+
 void printVector(vector<int> vect)
 {
     for(vector<int>::size_type i = 0 ; i < vect.size() ; i++)
