@@ -23,7 +23,9 @@ vector<int> shellSort(vector<int>& vect, bool Asc);
 
 void merge(vector<int>& temp, size_t left, size_t middle, size_t right, bool Asc);
 
-vector<int> mergeSort(vector<int>& vect, size_t left, size_t right, bool Asc);
+void mergeSortImpl(vector<int>& vect, size_t left, size_t right, bool Asc);
+
+vector<int> mergeSort(vector<int>& vect, bool Asc);
 
 size_t partition(vector<int>& temp, size_t low, size_t high, bool Asc);
 
@@ -31,7 +33,7 @@ void quickSortImpl(vector<int>& temp, size_t low, size_t high, bool Asc);
 
 vector<int> quickSort(std::vector<int>& vect, bool Asc);
 
-void heapify(vector<int>& temp, int n, int i, bool Asc);
+void heapify(vector<int>& temp, size_t n, size_t i, bool Asc);
 
 vector<int> heapSort(vector<int> vect, bool Asc);
 
@@ -57,11 +59,62 @@ int main()
 
     printVector(vect);
 
-    cout << "COPIANDO" << endl;
+    cout << "Selection Sort: " << endl;
+    vector<int> selectionS = selectionSort(vect, true);
+    printVector(selectionS);
 
+    cout << "Inverted Selection Sort: " << endl;
+    vector<int> IselectionS = selectionSort(vect, false);
+    printVector(IselectionS);
+
+    cout << "Bubble Sort: " << endl;
     vector<int> bubbleS = bubbleSort(vect, true);
-
     printVector(bubbleS);
+
+    cout << "Inverted Bubble Sort: " << endl;
+    vector<int> IbubbleS = bubbleSort(vect, false);
+    printVector(IbubbleS);
+
+    cout << "Insertion Sort: " << endl;
+    vector<int> insertionS = insertionSort(vect, true);
+    printVector(insertionS);
+
+    cout << "Inverted Insertion Sort: " << endl;
+    vector<int> IinsertionS = insertionSort(vect, false);
+    printVector(IinsertionS);
+
+    cout << "Shell Sort: " << endl;
+    vector<int> shellS = shellSort(vect, true);
+    printVector(shellS);
+
+    cout << "Inverted Shell Sort: " << endl;
+    vector<int> IshellS = shellSort(vect, false);
+    printVector(IshellS);
+
+    cout << "Merge Sort: " << endl;
+    vector<int> mergeS = mergeSort(vect, true);
+    printVector(mergeS);
+
+    cout << "Inverted Merge Sort: " << endl;
+    vector<int> ImergeS = mergeSort(vect, false);
+    printVector(ImergeS);
+
+    cout << "Heap Sort: " << endl;
+    vector<int> heapS = heapSort(vect, true);
+    printVector(heapS);
+
+    cout << "Inverted Heap Sort: " << endl;
+    vector<int> IheapS = heapSort(vect, false);
+    printVector(IheapS);
+
+    cout << "Quick Sort: " << endl;
+    vector<int> quickS = quickSort(vect, true);
+    printVector(quickS);
+
+    cout << "Inverted Quick Sort: " << endl;
+    vector<int> IquickS = quickSort(vect, false);
+    printVector(IquickS);
+
 
     return 0;
 }
@@ -174,7 +227,7 @@ vector<int> insertionSort(vector<int>& vect, bool Asc)
             int key = temp[i];
             size_t j = i-1;
 
-            while(j >= size_t(0) && temp[j] < key)
+            while(j != size_t(-1) && temp[j] < key)
             {
                 temp[j+1] = temp[j];
                 j--;
@@ -229,7 +282,7 @@ vector<int> shellSort(vector<int>& vect, bool Asc)
     return temp;
 }
 
-void merge(vector<int>& temp, size_t left, size_t middle, size_t right, bool Asc)
+void merge(vector<int>& vect, size_t left, size_t middle, size_t right, bool Asc)
 {
     size_t n1 = middle - left + 1;
     size_t n2 = right - middle;
@@ -237,23 +290,23 @@ void merge(vector<int>& temp, size_t left, size_t middle, size_t right, bool Asc
     vector<int> L(n1), R(n2);
 
     for(size_t i = 0; i < n1; i++)
-        L[i] = temp[left + i];
+        L[i] = vect[left + i];
 
     for(size_t j = 0; j < n2; j++)
-        R[j] = temp[middle + 1 + j];
+        R[j] = vect[middle + 1 + j];
 
     size_t i = 0, j = 0, k = left;
 
     while(i < n1 && j < n2)
     {
-        if(Asc && (L[i] <= R[j]) || (!Asc && L[i] >= R[j]))
+        if((Asc && (L[i] <= R[j])) || (!Asc && L[i] >= R[j]))
         {
-            temp[k] = L[i];
+            vect[k] = L[i];
             i++;
         }
         else
         {
-            temp[k] = R[j];
+            vect[k] = R[j];
             j++;
         }
 
@@ -262,53 +315,69 @@ void merge(vector<int>& temp, size_t left, size_t middle, size_t right, bool Asc
 
     while (i < n1) 
     {
-        temp[k] = L[i];
+        vect[k] = L[i];
         i++;
         k++;
     }
 
     while (j < n2) 
     {
-        temp[k] = R[j];
+        vect[k] = R[j];
         j++;
         k++;
     }
 }
 
-vector<int> mergeSort(vector<int>& vect, size_t left, size_t right, bool Asc)
+void mergeSortImpl(vector<int>& vect, size_t left, size_t right, bool Asc)
 {
-    vector<int> temp;
-    temp.assign(vect.begin(), vect.end());
-
     if(left<right)
     {
         size_t middle = left + (right-left)/2 ;
 
-        mergeSort(temp, left, middle, Asc);
-        mergeSort(temp, middle+1, right, Asc);
+        mergeSortImpl(vect, left, middle, Asc);
+        mergeSortImpl(vect, middle+1, right, Asc);
 
-        merge(temp, left, middle, right, Asc);
+        merge(vect, left, middle, right, Asc);
     }
+}
+
+vector<int> mergeSort(vector<int>& vect, bool Asc)
+{
+    vector<int> temp;
+    temp.assign(vect.begin(), vect.end());
+
+    mergeSortImpl(temp, 0, temp.size() - 1, Asc);
 
     return temp;
 }
 
-size_t partition(vector<int>& temp, size_t low, size_t high, bool Asc) 
+size_t partition(std::vector<int>& temp, size_t low, size_t high, bool Asc)
 {
     int pivot = temp[high];
     size_t i = low;
 
-    for (size_t j = low; j < high; j++) 
+    for (size_t j = low; j < high; j++)
     {
-        if ((Asc && temp[j] <= pivot) || (!Asc && temp[j] >= pivot))
+        if(Asc)
         {
-            i++;
-            swap(temp[i], temp[j]);
+            if (temp[j] <= pivot)
+            {
+                swap(temp[i], temp[j]);
+                i++;
+            }
+        }
+        else
+        {
+            if (temp[j] >= pivot)
+            {
+                swap(temp[i], temp[j]);
+                i++;
+            }
         }
     }
 
-    swap(temp[i + 1], temp[high]);
-    return i + 1;
+    swap(temp[i], temp[high]);
+    return i;
 }
 
 void quickSortImpl(vector<int>& temp, size_t low, size_t high, bool Asc)
@@ -316,30 +385,31 @@ void quickSortImpl(vector<int>& temp, size_t low, size_t high, bool Asc)
     if (low < high)
     {
         size_t PaIn = partition(temp, low, high, Asc);
-        quickSortImpl(temp, low, PaIn - 1, Asc);
+        if (PaIn > 0)
+            quickSortImpl(temp, low, PaIn - 1, Asc);
         quickSortImpl(temp, PaIn + 1, high, Asc);
     }
 }
 
 vector<int> quickSort(std::vector<int>& vect, bool Asc)
 {
-    vector<int> temp = vect; 
+    vector<int> temp;
+    temp.assign(vect.begin(), vect.end());
 
     quickSortImpl(temp, 0, temp.size() - 1, Asc);
-
     return temp;
 }
 
-void heapify(vector<int>& temp, int n, int i, bool Asc)
+void heapify(vector<int>& temp, size_t n, size_t i, bool Asc)
 {
-    int largest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
+    size_t largest = i;
+    size_t left = 2 * i + 1;
+    size_t right = 2 * i + 2;
 
-    if(left < n && ((Asc && temp[left] > temp[largest]) || (!Asc && temp[left] < temp[largest]))) 
+    if((left) < n && ((Asc && temp[left] > temp[largest]) || (!Asc && temp[left] < temp[largest]))) 
         largest = left;
 
-    if(right < n && ((Asc && temp[right] > temp[largest]) || (!Asc && temp[right] < temp[largest])))
+    if((right) < n && ((Asc && temp[right] > temp[largest]) || (!Asc && temp[right] < temp[largest])))
         largest = right;
 
     if(largest != i)
@@ -356,16 +426,16 @@ vector<int> heapSort(vector<int> vect, bool Asc)
 
     size_t s = temp.size();
 
-    for(size_t i = s/2 - 1; i >= 0; i--)
-        heapify(temp,s,i, Asc);
+    for(size_t i = s/2 - 1; i > 0; i--)
+        heapify(temp, s, i - 1, Asc);
 
     for(size_t i = s-1; i > 0; i--)
     {
-        swap(vect[0], vect[i]);
+        swap(temp[0], temp[i]);
         heapify(temp, i, 0, Asc);
     }
 
-    return vect;
+    return temp;
 }
 
 void printVector(vector<int> vect)
@@ -374,4 +444,6 @@ void printVector(vector<int> vect)
     {
         cout << vect[i] << " ";
     }
+
+    cout << endl;
 }
