@@ -13,6 +13,59 @@
 #include <chrono>
 using namespace std;
 
+class Data
+{
+    public:
+
+        Data()
+        {
+            random_device rd;
+            gen = mt19937(rd());
+        }
+        int getMax(int minR, int maxR)
+        {
+            uniform_int_distribution<int> dist(minR, maxR);
+            return dist(gen);
+        }
+        void genAscDesc(int max, vector<int>& Ascendant, vector<int>& Descendant)
+        {
+            //Limpiando en caso de que tengan algo
+            Ascendant.clear();
+            Descendant.clear();
+
+            //Generando los numeros
+            for (int i = 0; i <= max; i++)
+            {
+                Ascendant.push_back(i);
+            }
+
+            //Copiandolo e invirtiendolo
+            Descendant = Ascendant;
+            reverse(Descendant.begin(), Descendant.end());
+        }
+
+        struct Set
+    {
+        int minR, maxR, max;
+        struct Order
+        {
+            std::vector<int> vect;
+            int time;
+        };
+        Order Ascendant;
+        Order Descendant;
+        Order RandomDup;
+        Order RandomUnique;
+    };
+
+        struct Set set1;
+        struct Set set2;
+        struct Set set3;
+
+    private:
+        mt19937 gen;
+};
+
 vector<int> selectionSort(vector<int>& vect, bool Asc);
 
 vector<int> bubbleSort(vector<int>& vect, bool Asc);
@@ -44,9 +97,25 @@ void carrera(vector<int> vect, bool Asc);
 
 int main()
 {
+
+    Data info = Data();
+    info.set1.minR = 90000;
+    info.set1.maxR = 100000;
+    info.set1.max = info.getMax(info.set1.minR,info.set1.maxR);
+    info.genAscDesc(info.set1.max, info.set1.Ascendant.vect, info.set1.Descendant.vect);
+
+    info.set2.minR = 50000;
+    info.set2.maxR = 70000;
+    info.set2.max = info.getMax(info.set2.minR,info.set2.maxR);
+    info.genAscDesc(info.set2.max, info.set2.Ascendant.vect, info.set2.Descendant.vect);
+
+    info.set3.minR = 500;
+    info.set3.maxR = 1000;
+    info.set3.max = info.getMax(info.set3.minR,info.set3.maxR);
+    info.genAscDesc(info.set3.max, info.set3.Ascendant.vect, info.set3.Descendant.vect);
+
     int orden;
     bool Asc;
-    vector<int> vect = {123,2,43,45,65,6,77,0,9,110};
 
     cout << "Bienvenido a la carrera de algoritmos" << endl;
     cout << "Para elegir un ordenamiento ascendente ingrese 1 y para elegir un ordenamiento descendiente ingrese 2: ";
@@ -67,9 +136,9 @@ int main()
         cout << "Descendiente" << endl;
         Asc = false;
     }
-    printVector(vect);
+    printVector(info.set1.Ascendant.vect);
 
-    carrera(vect, Asc);
+    carrera(info.set1.Ascendant.vect, Asc);
 
     return 0;
 }
@@ -81,30 +150,30 @@ vector<int> selectionSort(vector<int>& vect, bool Asc)
 
     size_t s = temp.size();
 
-    if(Asc)
+    if(Asc) //Ascendente
     {
         for(size_t i = 0; i < s-1 ; i++)
         {
             size_t min = i;    
             for(size_t j = i+1 ; j < s; j++)
             {
-                if(temp[j] < temp[min]) min = j;
+                if(temp[j] < temp[min]) min = j; 
             }
 
-            if(min != i) swap(temp[min],temp[i]);
+            if(min != i) swap(temp[min],temp[i]); 
         }
     }
-    else
+    else //Descendente
     {
         for(size_t i = 0; i < s-1 ; i++)
         {
             size_t max = i;    
             for(size_t j = i+1 ; j < s; j++)
             {
-                if(temp[j] > temp[max]) max = j;
+                if(temp[j] > temp[max]) max = j; //Cambio en comparacion
             }
 
-            if(max != i) swap(temp[i],temp[max]);
+            if(max != i) swap(temp[i],temp[max]); //Cambio en swap
         }
     }
     return temp;
@@ -118,7 +187,7 @@ vector<int> bubbleSort(vector<int>& vect, bool Asc)
     size_t s = temp.size();
     bool swapped;
 
-    if(Asc)
+    if(Asc) //Ascendente
     {
         for (size_t i = 0; i < s - 1; i++) 
         {
@@ -134,14 +203,14 @@ vector<int> bubbleSort(vector<int>& vect, bool Asc)
             if (!swapped) break;
         }
     }
-    else
+    else //Descendente
     {
         for (size_t i = 0; i < s - 1; i++) 
         {
             swapped = false;
             for (size_t j = 0; j < s - i - 1; j++) 
             {
-                if (temp[j] < temp[j + 1]) 
+                if (temp[j] < temp[j + 1]) //Cambio en comparacion
                 {
                     swap(temp[j], temp[j + 1]);
                     swapped = true;
@@ -160,7 +229,7 @@ vector<int> insertionSort(vector<int>& vect, bool Asc)
 
     size_t s = temp.size();
 
-    if(Asc)
+    if(Asc) //Ascendente
     {
         for(size_t i = 1; i < s; i++)
         {
@@ -175,7 +244,7 @@ vector<int> insertionSort(vector<int>& vect, bool Asc)
             temp[j+1] = key;
         }
     }
-    else
+    else //Descendente
     {
         for(size_t i = 1; i < s; i++)
         {
@@ -200,7 +269,7 @@ vector<int> shellSort(vector<int>& vect, bool Asc)
 
     size_t s = temp.size();
 
-    if(Asc)
+    if(Asc) //Ascendente
     {
         for(size_t gap = s/2 ; gap > 0; gap /= 2)
         {
@@ -217,7 +286,7 @@ vector<int> shellSort(vector<int>& vect, bool Asc)
             }
         }
     }
-    else
+    else //Descendente
     {
         for(size_t gap = s/2 ; gap > 0; gap /= 2)
         {
@@ -226,7 +295,7 @@ vector<int> shellSort(vector<int>& vect, bool Asc)
                 int aux = temp[i];
                 size_t j;
 
-                for(j = i; j >= gap && temp[j-gap] < aux; j -= gap)
+                for(j = i; j >= gap && temp[j-gap] < aux; j -= gap) //Cambio en condicion
                     temp[j] = temp[j-gap];
 
                 temp[j] = aux;
