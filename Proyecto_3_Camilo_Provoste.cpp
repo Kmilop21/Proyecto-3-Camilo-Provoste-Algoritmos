@@ -18,12 +18,12 @@ vector<int> selectionSort(vector<int>& vect)
     vector<int> temp;
     temp.assign(vect.begin(), vect.end());
 
-    vector<int>::size_type s = temp.size();
+    size_t s = temp.size();
 
-    for(vector<int>::size_type i = 0; i < s-1 ; i++)
+    for(size_t i = 0; i < s-1 ; i++)
     {
-        vector<int>::size_type min = i;    
-        for(vector<int>::size_type j = i+1 ; i < s; j++)
+        size_t min = i;    
+        for(size_t j = i+1 ; i < s; j++)
         {
             if(temp[j] < temp[min]) min = j;
         }
@@ -37,11 +37,11 @@ vector<int> bubbleSort(vector<int>& vect) {
     vector<int> temp;
     temp.assign(vect.begin(), vect.end());
 
-    vector<int>::size_type s = temp.size();
+    size_t s = temp.size();
     bool swapped;
-    for (vector<int>::size_type i = 0; i < s - 1; i++) {
+    for (size_t i = 0; i < s - 1; i++) {
         swapped = false;
-        for (vector<int>::size_type j = 0; j < s - i - 1; j++) {
+        for (size_t j = 0; j < s - i - 1; j++) {
             if (temp[j] > temp[j + 1]) {
                 swap(temp[j], temp[j + 1]);
                 swapped = true;
@@ -59,14 +59,14 @@ vector<int> insertionSort(vector<int>& vect)
     vector<int> temp;
     temp.assign(vect.begin(), vect.end());
 
-    vector<int>::size_type s = temp.size();
+    size_t s = temp.size();
 
-    for(vector<int>::size_type i = 1; i < s; i++)
+    for(size_t i = 1; i < s; i++)
     {
         int key = temp[i];
-        vector<int>::size_type j = i-1;
+        size_t j = i-1;
 
-        while(j != vector<int>::size_type(-1) && temp[j] > key)
+        while(j != size_t(-1) && temp[j] > key)
         {
             temp[j+1] = temp[j];
             j--;
@@ -82,14 +82,14 @@ vector<int> shellSort(vector<int>& vect)
     vector<int> temp;
     temp.assign(vect.begin(), vect.end());
 
-    vector<int>::size_type s = temp.size();
+    size_t s = temp.size();
 
-    for(vector<int>::size_type gap = s/2 ; gap > 0; gap /= 2)
+    for(size_t gap = s/2 ; gap > 0; gap /= 2)
     {
-        for(vector<int>::size_type i = gap; i < s; i++)
+        for(size_t i = gap; i < s; i++)
         {
             int aux = temp[i];
-            vector<int>::size_type j;
+            size_t j;
 
             for(j = i; j >= gap && temp[j-gap] > aux; j -= gap)
             {
@@ -102,20 +102,20 @@ vector<int> shellSort(vector<int>& vect)
     return temp;
 }
 
-void merge(vector<int>& temp, int left, int middle, int right)
+void merge(vector<int>& temp, size_t left, size_t middle, size_t right)
 {
-    int n1 = middle - left + 1;
-    int n2 = right - middle;
+    size_t n1 = middle - left + 1;
+    size_t n2 = right - middle;
 
     vector<int> L(n1), R(n2);
 
-    for(int i = 0; i < n1; i++)
+    for(size_t i = 0; i < n1; i++)
         L[i] = temp[left+1];
 
-    for(int j = 0; j < n2; j++)
+    for(size_t j = 0; j < n2; j++)
         R[j] = temp[middle + 1 + j];
 
-    int i = 0, j = 0, k = left;
+    size_t i = 0, j = 0, k = left;
 
     while(i < n1 && j < n2)
     {
@@ -147,14 +147,14 @@ void merge(vector<int>& temp, int left, int middle, int right)
     }
 }
 
-vector<int> mergeSort(vector<int>& vect, int left, int right)
+vector<int> mergeSort(vector<int>& vect, size_t left, size_t right)
 {
     vector<int> temp;
     temp.assign(vect.begin(), vect.end());
 
     if(left<right)
     {
-        int middle = left + (right-left)/2 ;
+        size_t middle = left + (right-left)/2 ;
 
         mergeSort(temp, left, middle);
         mergeSort(temp, middle+1, right);
@@ -165,37 +165,57 @@ vector<int> mergeSort(vector<int>& vect, int left, int right)
     return vect;
 }
 
-int partition(vector<int>& temp, int low, int high)
+size_t partition(vector<int>& temp, size_t low, size_t high) 
 {
     int pivot = temp[high];
-    int i = low - 1;
+    size_t i = low;
 
-    for(int j = low; j < high; j++)
+    for (size_t j = low; j < high; j++) 
     {
-        if(temp[j] <= pivot)
+        if (temp[j] <= pivot)
         {
             i++;
-            swap(temp[i],temp[j]);
+            swap(temp[i], temp[j]);
         }
     }
 
-    swap(temp[i+1],temp[high]);
-    return i+1;
+    swap(temp[i + 1], temp[high]);
+    return i + 1;
 }
 
-vector<int> quickSort(vector<int>& vect, int low, int high)
+void quickSortImpl(vector<int>& temp, size_t low, size_t high)
 {
-    vector<int> temp;
-    temp.assign(vect.begin(), vect.end());
-
-    if(low < high)
+    if (low < high)
     {
-        int PaIn = partition(vect, low, high);
-        quickSort(vect, low, PaIn - 1);
-        quickSort(vect, PaIn + 1, high);
+        size_t PaIn = partition(temp, low, high);
+        quickSortImpl(temp, low, PaIn - 1);
+        quickSortImpl(temp, PaIn + 1, high);
     }
+}
+
+vector<int> quickSort(std::vector<int>& vect)
+{
+    vector<int> temp = vect; 
+
+    quickSortImpl(temp, 0, temp.size() - 1);
 
     return temp;
+}
+
+void heapify(vector<int>& temp, int n, int i)
+{
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if(left < n && temp[left] > temp[largest]) largest = left;
+
+    if(right < n && temp[right] > temp[largest]) largest = right;
+
+    if(largest != i)
+    {
+        swap(temp[i], temp[largest]);
+    }
 }
 
 vector<int> heapSort(vector<int> vect)
@@ -203,12 +223,23 @@ vector<int> heapSort(vector<int> vect)
     vector<int> temp;
     temp.assign(vect.begin(), vect.end());
 
+    size_t s = temp.size();
+
+    for(size_t i = s/2 - 1; i >= 0; i--)
+        heapify(temp,s,i);
+
+    for(size_t i = s-1; i > 0; i--)
+    {
+        swap(vect[0], vect[i]);
+        heapify(temp, i, 0);
+    }
+
     return vect;
 }
 
 void printVector(vector<int> vect)
 {
-    for(vector<int>::size_type i = 0 ; i < vect.size() ; i++)
+    for(size_t i = 0 ; i < vect.size() ; i++)
     {
         cout << vect[i] << " ";
     }
