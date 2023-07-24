@@ -262,7 +262,7 @@ int main()
         Asc = false;
     }
 
-    cout << endl;
+    cout << endl << endl;
     
     info.initCarrera(Asc);
 
