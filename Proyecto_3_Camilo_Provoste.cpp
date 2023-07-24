@@ -449,7 +449,7 @@ void merge(vector<int>& vect, size_t left, size_t middle, size_t right, bool Asc
 
     while(i < n1 && j < n2)
     {
-        if((Asc && (L[i] <= R[j])) || (!Asc && L[i] >= R[j]))
+        if((Asc && (L[i] <= R[j])) || (!Asc && L[i] >= R[j])) //Ascendente || Descendente
         {
             vect[k] = L[i];
             i++;
@@ -508,7 +508,7 @@ size_t partition(std::vector<int>& temp, size_t low, size_t high, bool Asc)
 
     for (size_t j = low; j < high; j++)
     {
-        if(Asc)
+        if(Asc) //Ascendente
         {
             if (temp[j] <= pivot)
             {
@@ -516,7 +516,7 @@ size_t partition(std::vector<int>& temp, size_t low, size_t high, bool Asc)
                 i++;
             }
         }
-        else
+        else //Descendente
         {
             if (temp[j] >= pivot)
             {
@@ -556,10 +556,10 @@ void heapify(vector<int>& temp, size_t n, size_t i, bool Asc)
     size_t left = 2 * i + 1;
     size_t right = 2 * i + 2;
 
-    if((left) < n && ((Asc && temp[left] > temp[largest]) || (!Asc && temp[left] < temp[largest]))) 
+    if((left) < n && ((Asc && temp[left] > temp[largest]) || (!Asc && temp[left] < temp[largest]))) //Ascendente || Descendente
         largest = left;
 
-    if((right) < n && ((Asc && temp[right] > temp[largest]) || (!Asc && temp[right] < temp[largest])))
+    if((right) < n && ((Asc && temp[right] > temp[largest]) || (!Asc && temp[right] < temp[largest]))) //Ascendente || Descendente
         largest = right;
 
     if(largest != i)
