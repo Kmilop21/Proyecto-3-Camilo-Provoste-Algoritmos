@@ -13,6 +13,36 @@
 #include <chrono>
 using namespace std;
 
+vector<int> selectionSort(vector<int>& vect, bool Asc);
+
+vector<int> bubbleSort(vector<int>& vect, bool Asc);
+
+vector<int> insertionSort(vector<int>& vect, bool Asc);
+
+vector<int> shellSort(vector<int>& vect, bool Asc);
+
+void merge(vector<int>& temp, size_t left, size_t middle, size_t right, bool Asc);
+
+void mergeSortImpl(vector<int>& vect, size_t left, size_t right, bool Asc);
+
+vector<int> mergeSort(vector<int>& vect, bool Asc);
+
+size_t partition(vector<int>& temp, size_t low, size_t high, bool Asc);
+
+void quickSortImpl(vector<int>& temp, size_t low, size_t high, bool Asc);
+
+vector<int> quickSort(std::vector<int>& vect, bool Asc);
+
+void heapify(vector<int>& temp, size_t n, size_t i, bool Asc);
+
+vector<int> heapSort(vector<int> vect, bool Asc);
+
+void printVector(vector<int> vect);
+
+void carrera(vector<int> vect, bool Asc);
+
+//void initCarrera(vector<int> vect, bool Asc);
+
 class Data
 {
     public:
@@ -57,18 +87,39 @@ class Data
         void randomWithoutDups(int max, vector<int>& RandomUnique)
         {
             RandomUnique.clear(); //En caso de que tenga algo
-            for (int i = 0; i < max; i++) //Generando todos los numeros
+            for (size_t i = 0; i < static_cast<size_t>(max); i++) //Generando todos los numeros
             {
-                RandomUnique.push_back(i);
+                RandomUnique.push_back(static_cast<int>(i));
             }
             
             //Usando el algoritmo "Fisher-Yates" para revolver el vector
-            for (int i = max - 1; i > 0; i--) 
+            for (size_t i = static_cast<size_t>(max) - 1; i > 0; i--) 
             {
-                uniform_int_distribution<int> dist(0, i);
-                int j = dist(gen);
+                uniform_int_distribution<size_t> dist(0, i);
+                size_t j = dist(gen);
                 swap(RandomUnique[i], RandomUnique[j]);
             }
+        }
+
+        void initCarrera(bool Asc)
+        {
+            cout << "Carrera 1: " << endl;
+            carrera(this->set1.Ascendant.vect,Asc);
+            carrera(this->set1.Descendant.vect,Asc);
+            carrera(this->set1.RandomDup.vect,Asc);
+            carrera(this->set1.RandomUnique.vect,Asc);
+
+            cout << "Carrera 2: " << endl;
+            carrera(this->set2.Ascendant.vect,Asc);
+            carrera(this->set2.Descendant.vect,Asc);
+            carrera(this->set2.RandomDup.vect,Asc);
+            carrera(this->set2.RandomUnique.vect,Asc);
+
+            cout << "Carrera 3: " << endl;
+            carrera(this->set3.Ascendant.vect,Asc);
+            carrera(this->set3.Descendant.vect,Asc);
+            carrera(this->set3.RandomDup.vect,Asc);
+            carrera(this->set3.RandomUnique.vect,Asc);
         }
 
         struct Set
@@ -93,33 +144,6 @@ class Data
         mt19937 gen;
 };
 
-vector<int> selectionSort(vector<int>& vect, bool Asc);
-
-vector<int> bubbleSort(vector<int>& vect, bool Asc);
-
-vector<int> insertionSort(vector<int>& vect, bool Asc);
-
-vector<int> shellSort(vector<int>& vect, bool Asc);
-
-void merge(vector<int>& temp, size_t left, size_t middle, size_t right, bool Asc);
-
-void mergeSortImpl(vector<int>& vect, size_t left, size_t right, bool Asc);
-
-vector<int> mergeSort(vector<int>& vect, bool Asc);
-
-size_t partition(vector<int>& temp, size_t low, size_t high, bool Asc);
-
-void quickSortImpl(vector<int>& temp, size_t low, size_t high, bool Asc);
-
-vector<int> quickSort(std::vector<int>& vect, bool Asc);
-
-void heapify(vector<int>& temp, size_t n, size_t i, bool Asc);
-
-vector<int> heapSort(vector<int> vect, bool Asc);
-
-void printVector(vector<int> vect);
-
-void carrera(vector<int> vect, bool Asc);
 
 
 int main()
@@ -169,9 +193,8 @@ int main()
         cout << "Descendiente" << endl;
         Asc = false;
     }
-    printVector(info.set1.Ascendant.vect);
-
-    carrera(info.set1.Ascendant.vect, Asc);
+    
+    info.initCarrera(Asc);
 
     return 0;
 }
@@ -516,7 +539,7 @@ void carrera(vector<int> vect, bool Asc)
             {
                 cout << "Selection Sort: " << endl;
                 vector<int> selectionS = selectionSort(vect, Asc);
-                printVector(selectionS);
+                //printVector(selectionS);
                 break;
             }
             
@@ -524,7 +547,7 @@ void carrera(vector<int> vect, bool Asc)
             {
                 cout << "Bubble Sort: " << endl;
                 vector<int> bubbleS = bubbleSort(vect, Asc);
-                printVector(bubbleS);
+                //printVector(bubbleS);
                 break;
             }
 
@@ -532,7 +555,7 @@ void carrera(vector<int> vect, bool Asc)
             {
                 cout << "Insertion Sort: " << endl;
                 vector<int> insertionS = insertionSort(vect, Asc);
-                printVector(insertionS);
+                //printVector(insertionS);
                 break;
             }
 
@@ -540,7 +563,7 @@ void carrera(vector<int> vect, bool Asc)
             {
                 cout << "Shell Sort: " << endl;
                 vector<int> shellS = shellSort(vect, Asc);
-                printVector(shellS);
+                //printVector(shellS);
                 break;
             }
 
@@ -548,7 +571,7 @@ void carrera(vector<int> vect, bool Asc)
             {
                 cout << "Merge Sort: " << endl;
                 vector<int> mergeS = mergeSort(vect, Asc);
-                printVector(mergeS);
+                //printVector(mergeS);
                 break;
             }
 
@@ -556,7 +579,7 @@ void carrera(vector<int> vect, bool Asc)
             {
                 cout << "Quick Sort: " << endl;
                 vector<int> quickS = quickSort(vect, Asc);
-                printVector(quickS);
+                //printVector(quickS);
                 break;
             }
 
@@ -564,7 +587,7 @@ void carrera(vector<int> vect, bool Asc)
             {
                 cout << "Heap Sort: " << endl;
                 vector<int> heapS = heapSort(vect, Asc);
-                printVector(heapS);
+                //printVector(heapS);
                 break;
             }
         }
