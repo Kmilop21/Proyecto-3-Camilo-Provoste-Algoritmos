@@ -573,9 +573,9 @@ void carrera(vector<int> vect, bool Asc, bool skip)
 
             case 5:
             {
+                cout << "Quick Sort: " << endl;
                 if(!skip)
                 {
-                    cout << "Quick Sort: " << endl;
                     vector<int> quickS = quickSort(vect, Asc);
                 }
                 else 
