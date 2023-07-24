@@ -39,9 +39,7 @@ vector<int> heapSort(vector<int> vect, bool Asc);
 
 void printVector(vector<int> vect);
 
-void carrera(vector<int> vect, bool Asc);
-
-//void initCarrera(vector<int> vect, bool Asc);
+void carrera(vector<int> vect, bool Asc, bool skip);
 
 class Data
 {
@@ -104,22 +102,22 @@ class Data
         void initCarrera(bool Asc)
         {
             cout << "Carrera 1: " << endl;
-            carrera(this->set1.Ascendant.vect,Asc);
-            carrera(this->set1.Descendant.vect,Asc);
-            carrera(this->set1.RandomDup.vect,Asc);
-            carrera(this->set1.RandomUnique.vect,Asc);
+            carrera(this->set1.Ascendant.vect,Asc,true);
+            carrera(this->set1.Descendant.vect,Asc,true);
+            carrera(this->set1.RandomDup.vect,Asc,true);
+            carrera(this->set1.RandomUnique.vect,Asc,true);
 
             cout << "Carrera 2: " << endl;
-            carrera(this->set2.Ascendant.vect,Asc);
-            carrera(this->set2.Descendant.vect,Asc);
-            carrera(this->set2.RandomDup.vect,Asc);
-            carrera(this->set2.RandomUnique.vect,Asc);
+            carrera(this->set2.Ascendant.vect,Asc,true);
+            carrera(this->set2.Descendant.vect,Asc,true);
+            carrera(this->set2.RandomDup.vect,Asc,true);
+            carrera(this->set2.RandomUnique.vect,Asc,true);
 
             cout << "Carrera 3: " << endl;
-            carrera(this->set3.Ascendant.vect,Asc);
-            carrera(this->set3.Descendant.vect,Asc);
-            carrera(this->set3.RandomDup.vect,Asc);
-            carrera(this->set3.RandomUnique.vect,Asc);
+            carrera(this->set3.Ascendant.vect,Asc,false);
+            carrera(this->set3.Descendant.vect,Asc,false);
+            carrera(this->set3.RandomDup.vect,Asc,false);
+            carrera(this->set3.RandomUnique.vect,Asc,false);
         }
 
         struct Set
@@ -195,6 +193,8 @@ int main()
     }
     
     info.initCarrera(Asc);
+
+    //carrera(info.set3.Ascendant.vect,Asc);
 
     return 0;
 }
@@ -528,7 +528,7 @@ void printVector(vector<int> vect)
     cout << endl;
 }
 
-void carrera(vector<int> vect, bool Asc)
+void carrera(vector<int> vect, bool Asc, bool skip)
 {
     for (int i = 0; i < 7; i++)
     {
@@ -547,7 +547,6 @@ void carrera(vector<int> vect, bool Asc)
             {
                 cout << "Bubble Sort: " << endl;
                 vector<int> bubbleS = bubbleSort(vect, Asc);
-                //printVector(bubbleS);
                 break;
             }
 
@@ -555,7 +554,6 @@ void carrera(vector<int> vect, bool Asc)
             {
                 cout << "Insertion Sort: " << endl;
                 vector<int> insertionS = insertionSort(vect, Asc);
-                //printVector(insertionS);
                 break;
             }
 
@@ -563,7 +561,6 @@ void carrera(vector<int> vect, bool Asc)
             {
                 cout << "Shell Sort: " << endl;
                 vector<int> shellS = shellSort(vect, Asc);
-                //printVector(shellS);
                 break;
             }
 
@@ -571,15 +568,20 @@ void carrera(vector<int> vect, bool Asc)
             {
                 cout << "Merge Sort: " << endl;
                 vector<int> mergeS = mergeSort(vect, Asc);
-                //printVector(mergeS);
                 break;
             }
 
             case 5:
             {
-                cout << "Quick Sort: " << endl;
-                vector<int> quickS = quickSort(vect, Asc);
-                //printVector(quickS);
+                if(!skip)
+                {
+                    cout << "Quick Sort: " << endl;
+                    vector<int> quickS = quickSort(vect, Asc);
+                }
+                else 
+                {
+                    cout << "Skipped due to stack overflow" << endl;
+                }
                 break;
             }
 
@@ -587,7 +589,6 @@ void carrera(vector<int> vect, bool Asc)
             {
                 cout << "Heap Sort: " << endl;
                 vector<int> heapS = heapSort(vect, Asc);
-                //printVector(heapS);
                 break;
             }
         }
