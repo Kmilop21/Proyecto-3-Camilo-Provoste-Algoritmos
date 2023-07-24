@@ -266,8 +266,6 @@ int main()
     
     info.initCarrera(Asc);
 
-    //carrera(info.set3.Ascendant.vect,Asc);
-
     return 0;
 }
 
