@@ -1,0 +1,2 @@
+Este proyecto fue elaborado y probado en Windows, por lo que se recomiendo usar Windows.
+La informacion de los sets de datos se genera al ejecutar el proyecto y no se deben cambiar los rangos.
