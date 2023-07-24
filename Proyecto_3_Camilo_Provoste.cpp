@@ -39,7 +39,7 @@ vector<int> heapSort(vector<int> vect, bool Asc);
 
 void printVector(vector<int> vect);
 
-void carrera(vector<int> vect, bool Asc, bool skip);
+vector<float> carrera(vector<int> vect, bool Asc, bool skip);
 
 class Data
 {
@@ -99,40 +99,94 @@ class Data
             }
         }
 
-        void initCarrera(bool Asc)
-        {
-            cout << "Carrera 1: " << endl;
-            carrera(this->set1.Ascendant.vect,Asc,true);
-            carrera(this->set1.Descendant.vect,Asc,true);
-            carrera(this->set1.RandomDup.vect,Asc,true);
-            carrera(this->set1.RandomUnique.vect,Asc,true);
-
-            cout << "Carrera 2: " << endl;
-            carrera(this->set2.Ascendant.vect,Asc,true);
-            carrera(this->set2.Descendant.vect,Asc,true);
-            carrera(this->set2.RandomDup.vect,Asc,true);
-            carrera(this->set2.RandomUnique.vect,Asc,true);
-
-            cout << "Carrera 3: " << endl;
-            carrera(this->set3.Ascendant.vect,Asc,false);
-            carrera(this->set3.Descendant.vect,Asc,false);
-            carrera(this->set3.RandomDup.vect,Asc,false);
-            carrera(this->set3.RandomUnique.vect,Asc,false);
-        }
-
         struct Set
-        {
+        {   
             int minR, maxR, max;
             struct Order
             {
-                std::vector<int> vect;
-                int time;
+                vector<int> vect;
+                vector<float> time;
+                vector<string> algorithm = {"Selection","Bubble","Insertion","Shell","Merge","Quick","Heap"};
             };
             Order Ascendant;
             Order Descendant;
             Order RandomDup;
             Order RandomUnique;
         };
+
+        size_t findWinner(const Data::Set::Order& order, bool skip)
+        {
+            float lowestTime = numeric_limits<float>::max();
+            size_t lowestTimeIndex = numeric_limits<size_t>::max();
+
+            for (size_t i = 0; i < order.time.size(); i++)
+            {
+                if (skip && i == 5)
+                {
+                    cout << "Saltando 5 por stack overflow" << endl;
+                }
+                else
+                {
+                    if (order.time[i] < lowestTime)
+                    {
+                        lowestTime = order.time[i];
+                        lowestTimeIndex = i;
+                    }
+                }
+            }
+            return lowestTimeIndex;
+        }
+        
+        void getResults(int max, Data::Set::Order& order, bool skip)
+        {
+            for(size_t i = 0; i < static_cast<size_t>(max); i++)
+            {
+                if(skip && i == 5)
+                {
+                    cout << "Saltado porque causa stack overflow" << endl;
+                }
+                else
+                {
+                    cout << "Algoritmo: " << order.algorithm[i] << " -- Time: " << order.time[i] << endl;
+                }
+            }
+            
+            cout << endl;
+            size_t winnerIndex = findWinner(order, skip);
+            cout << "The winner is Algorithm: " << order.algorithm[winnerIndex] << " with Time: " << order.time[winnerIndex] << endl;
+        }
+        void initCarrera(bool Asc)
+        {
+            cout << "Carrera 1: " << endl;
+            set1.Ascendant.time = carrera(set1.Ascendant.vect,Asc,true);
+            getResults(set1.max,set1.Ascendant,true);
+            set1.Descendant.time = carrera(set1.Descendant.vect,Asc,true);
+            getResults(set1.max,set1.Descendant,true);
+            set1.RandomDup.time = carrera(set1.RandomDup.vect,Asc,true);
+            getResults(set1.max,set1.RandomDup,true);
+            set1.RandomUnique.time = carrera(set1.RandomUnique.vect,Asc,true);
+            getResults(set1.max,set1.RandomUnique,true);
+
+            cout << "Carrera 2: " << endl;
+            set2.Ascendant.time = carrera(set2.Ascendant.vect,Asc,true);
+            getResults(set2.max,set2.Ascendant,true);
+            set2.Descendant.time = carrera(set2.Descendant.vect,Asc,true);
+            getResults(set2.max,set2.Descendant,true);
+            set2.RandomDup.time = carrera(set2.RandomDup.vect,Asc,true);
+            getResults(set2.max,set2.RandomDup,true);
+            set2.RandomUnique.time = carrera(set2.RandomUnique.vect,Asc,true);
+            getResults(set2.max,set2.RandomUnique,true);
+
+            cout << "Carrera 3: " << endl;
+            set3.Ascendant.time = carrera(set3.Ascendant.vect,Asc,false);
+            getResults(set3.max,set3.Ascendant,false);
+            set3.Descendant.time = carrera(set3.Descendant.vect,Asc,false);
+            getResults(set3.max,set3.Descendant,false);
+            set3.RandomDup.time = carrera(set3.RandomDup.vect,Asc,false);
+            getResults(set3.max,set3.RandomDup,false);
+            set3.RandomUnique.time = carrera(set3.RandomUnique.vect,Asc,false);
+            getResults(set3.max,set3.RandomUnique,false);
+        }
 
         struct Set set1;
         struct Set set2;
@@ -528,8 +582,9 @@ void printVector(vector<int> vect)
     cout << endl;
 }
 
-void carrera(vector<int> vect, bool Asc, bool skip)
+vector<float> carrera(vector<int> vect, bool Asc, bool skip)
 {
+    vector<float> times;
     for (int i = 0; i < 7; i++)
     {
         auto start = chrono::system_clock::now();
@@ -539,7 +594,6 @@ void carrera(vector<int> vect, bool Asc, bool skip)
             {
                 cout << "Selection Sort: " << endl;
                 vector<int> selectionS = selectionSort(vect, Asc);
-                //printVector(selectionS);
                 break;
             }
             
@@ -573,6 +627,7 @@ void carrera(vector<int> vect, bool Asc, bool skip)
 
             case 5:
             {
+                //Quick sort da stack overflow en los primeros 2 sets (los mas grandes)
                 cout << "Quick Sort: " << endl;
                 if(!skip)
                 {
@@ -595,7 +650,10 @@ void carrera(vector<int> vect, bool Asc, bool skip)
         auto end = chrono::system_clock::now();
 
         chrono::duration<float,milli> duration = end - start;
-        cout << "Duration: " << duration.count() << "ms" << endl;
-        cout << endl << endl;
+        times.push_back(duration.count());
+        //cout << "Duration: " << duration.count() << "ms" << endl;
+        //cout << endl << endl;
     }
+
+    return times;
 }
