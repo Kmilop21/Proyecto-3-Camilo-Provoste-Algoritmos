@@ -139,7 +139,7 @@ class Data
         
         void getResults(Data::Set::Order& order, bool skip)
         {
-            for(size_t i = 0; i < order.time.max_size(); i++)
+            for(size_t i = 0; i < order.time.size(); i++)
             {
                 if(skip && i == 5)
                 {
@@ -147,45 +147,61 @@ class Data
                 }
                 else
                 {
-                    cout << "Algoritmo: " << order.algorithm[i] << " -- Tiempo: " << order.time[i] << "ml" << endl;
+                    cout << "Algoritmo: " << order.algorithm[i] << "Sort " << " -- Tiempo: " << order.time[i] << "ml" << endl;
                 }
             }
             
             cout << endl;
             size_t winnerIndex = findWinner(order, skip);
-            cout << "Algoritmo ganador: " << order.algorithm[winnerIndex] << " -- Tiempo: " << order.time[winnerIndex] << "ml" << endl;
+            cout << "***Algoritmo ganador: " << order.algorithm[winnerIndex] << "Sort " << " -- Tiempo: " << order.time[winnerIndex] << "ml" << endl;
+            cout << endl << endl;
         }
         void initCarrera(bool Asc)
         {
-            cout << "Carrera 1: " << endl;
-            set1.Ascendant.time = carrera(set1.Ascendant.vect,Asc,true);
-            getResults(set1.Ascendant,true);
-            set1.Descendant.time = carrera(set1.Descendant.vect,Asc,true);
-            getResults(set1.Descendant,true);
-            set1.RandomDup.time = carrera(set1.RandomDup.vect,Asc,true);
-            getResults(set1.RandomDup,true);
-            set1.RandomUnique.time = carrera(set1.RandomUnique.vect,Asc,true);
-            getResults(set1.RandomUnique,true);
+            cout << "Carrera 1(rango de 90mil a 100mil): " << endl;
+            cout << endl;
+            cout << "Modo ordenado: " << endl; 
+                set1.Ascendant.time = carrera(set1.Ascendant.vect,Asc,true);
+                getResults(set1.Ascendant,true);
+            cout << "Modo inversamente ordenado: " << endl;
+                set1.Descendant.time = carrera(set1.Descendant.vect,Asc,true);
+                getResults(set1.Descendant,true);
+            cout << "Modo aleatorio con repeticion: " << endl;
+                set1.RandomDup.time = carrera(set1.RandomDup.vect,Asc,true);
+                getResults(set1.RandomDup,true);
+            cout << "Modo aleatorio sin repeticion: " << endl;
+                set1.RandomUnique.time = carrera(set1.RandomUnique.vect,Asc,true);
+                getResults(set1.RandomUnique,true);
 
-            cout << "Carrera 2: " << endl;
-            set2.Ascendant.time = carrera(set2.Ascendant.vect,Asc,true);
-            getResults(set2.Ascendant,true);
-            set2.Descendant.time = carrera(set2.Descendant.vect,Asc,true);
-            getResults(set2.Descendant,true);
-            set2.RandomDup.time = carrera(set2.RandomDup.vect,Asc,true);
-            getResults(set2.RandomDup,true);
-            set2.RandomUnique.time = carrera(set2.RandomUnique.vect,Asc,true);
-            getResults(set2.RandomUnique,true);
+            cout << "Carrera 2(rango de 50mil a 70mil): " << endl;
+            cout << endl;
+            cout << "Modo ordenado: " << endl; 
+                set2.Ascendant.time = carrera(set2.Ascendant.vect,Asc,true);
+                getResults(set2.Ascendant,true);
+            cout << "Modo inversamente ordenado: " << endl;
+                set2.Descendant.time = carrera(set2.Descendant.vect,Asc,true);
+                getResults(set2.Descendant,true);
+            cout << "Modo aleatorio con repeticion: " << endl;
+                set2.RandomDup.time = carrera(set2.RandomDup.vect,Asc,true);
+                getResults(set2.RandomDup,true);
+            cout << "Modo aleatorio sin repeticion: " << endl;
+                set2.RandomUnique.time = carrera(set2.RandomUnique.vect,Asc,true);
+                getResults(set2.RandomUnique,true);
 
-            cout << "Carrera 3: " << endl;
-            set3.Ascendant.time = carrera(set3.Ascendant.vect,Asc,false);
-            getResults(set3.Ascendant,false);
-            set3.Descendant.time = carrera(set3.Descendant.vect,Asc,false);
-            getResults(set3.Descendant,false);
-            set3.RandomDup.time = carrera(set3.RandomDup.vect,Asc,false);
-            getResults(set3.RandomDup,false);
-            set3.RandomUnique.time = carrera(set3.RandomUnique.vect,Asc,false);
-            getResults(set3.RandomUnique,false);
+            cout << "Carrera 3(rango de 500 a 1000): " << endl;
+            cout << endl;
+            cout << "Modo ordenado: " << endl; 
+                set3.Ascendant.time = carrera(set3.Ascendant.vect,Asc,false);
+                getResults(set3.Ascendant,false);
+            cout << "Modo inversamente ordenado: " << endl;
+                set3.Descendant.time = carrera(set3.Descendant.vect,Asc,false);
+                getResults(set3.Descendant,false);
+             cout << "Modo aleatorio con repeticion: " << endl;
+                set3.RandomDup.time = carrera(set3.RandomDup.vect,Asc,false);
+                getResults(set3.RandomDup,false);
+            cout << "Modo aleatorio sin repeticion: " << endl;
+                set3.RandomUnique.time = carrera(set3.RandomUnique.vect,Asc,false);
+                getResults(set3.RandomUnique,false);
         }
 
         struct Set set1;
@@ -245,6 +261,8 @@ int main()
         cout << "Descendiente" << endl;
         Asc = false;
     }
+
+    cout << endl;
     
     info.initCarrera(Asc);
 
@@ -626,10 +644,6 @@ vector<float> carrera(vector<int> vect, bool Asc, bool skip)
                 if(!skip)
                 {
                     vector<int> quickS = quickSort(vect, Asc);
-                }
-                else 
-                {
-                    cout << "Skipped due to stack overflow" << endl;
                 }
                 break;
             }
